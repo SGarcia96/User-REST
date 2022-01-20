@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +61,7 @@ public class StudentController {
 	// respuesta
 	// Devuelve en la cabecera la URL
 	@PostMapping
-	public ResponseEntity<?> addStudent(@RequestBody Student student) {
+	public ResponseEntity<?> addStudent(@Valid @RequestBody Student student) {
 		Student result = this.studentService.save(student);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(result.getId())
 				.toUri();
