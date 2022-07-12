@@ -40,7 +40,8 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public void deleteById(long id) {
-		studentRepository.deleteById(id);
+		Optional<Student> studentToDelete = Optional.of(studentRepository.findById(id).orElseThrow(StudentNotFoundException::new));
+		studentRepository.deleteById(studentToDelete.get().getId());
 	}
 
 }
