@@ -6,17 +6,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.ejemplos.spring.controller.StudentController;
-import com.ejemplos.spring.service.StudentService;
+import com.ejemplos.spring.controller.UserController;
+import com.ejemplos.spring.service.UserService;
 
 @SpringBootTest
 class ApiRestFullApplicationTests {
 
 	@Autowired
-	private StudentController controller;
+	private UserController controller;
 
 	@Autowired
-	private StudentService service;
+	private UserService service;
 
 	@Test
 	void contextLoads() {

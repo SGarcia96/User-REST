@@ -3,7 +3,7 @@ package com.ejemplos.spring.dto;
 import lombok.Data;
 
 @Data
-public class StudentDTO {
+public class UserDTO {
 
 	private Long id;
 	private String firstName;

@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @SuppressWarnings("serial")
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class StudentNotFoundException extends RuntimeException {
+public class UserNotFoundException extends RuntimeException {
 
-	public StudentNotFoundException() {
-		super("Student does not exist");
+	public UserNotFoundException() {
+		super("User does not exist");
 	}
 
-	public StudentNotFoundException(Long id) {
-		super("Student does not exist " + id);
+	public UserNotFoundException(Long id) {
+		super("User does not exist with id: " + id);
 	}
 
 }

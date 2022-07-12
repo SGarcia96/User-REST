@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.ejemplos.spring.service.StudentService;
+import com.ejemplos.spring.service.UserService;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.greaterThan;
@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.greaterThan;
 public class StudentControllerTest {
 
 	@MockBean
-	StudentService studentService;
+	UserService studentService;
 
 	@BeforeAll
 	public static void setup() {

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student implements Serializable {
+public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
