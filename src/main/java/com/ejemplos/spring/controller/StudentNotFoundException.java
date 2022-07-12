@@ -3,19 +3,16 @@ package com.ejemplos.spring.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+@SuppressWarnings("serial")
 @ResponseStatus(HttpStatus.NOT_FOUND)
-class StudentNotFoundException extends RuntimeException {
-
-	private static final long serialVersionUID = 1L;
+public class StudentNotFoundException extends RuntimeException {
 
 	public StudentNotFoundException() {
-		super("Epic Fail: No existe el estudiante");
-		action1();
+		super("Student does not exist");
 	}
+
 	public StudentNotFoundException(Long id) {
-		super("Epic Fail: No existe el estudiante "+id);
-	}	
-	public void action1() {
-		
+		super("Student does not exist " + id);
 	}
+
 }

@@ -6,15 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Schema(name = "Student", description = "Student Class")
 @Entity
 @Data
 @NoArgsConstructor
@@ -23,17 +22,16 @@ public class Student implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Schema(name = "id", description = "Identificador único para el estudiante", example = "42", required = true)
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	@Size(min = 0, max = 30)
 	@NotEmpty
-	private String first_name;
+	private String firstName;
 	@NotEmpty
-	private String last_name;
+	private String lastName;
 	@NotEmpty
-	private String year;
+	@Email
+	private String email;
 
 }

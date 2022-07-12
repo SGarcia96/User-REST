@@ -1,6 +1,5 @@
 package com.ejemplos.spring.controller;
 
-import java.net.URI;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -17,93 +16,67 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ejemplos.spring.converter.StudentConverter;
+import com.ejemplos.spring.dto.StudentDTO;
 import com.ejemplos.spring.model.Student;
 import com.ejemplos.spring.service.StudentService;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
-@RequestMapping("/students")
-@Tag(name = "student", description = "the Student API")
+@Log4j2
+@RequestMapping("/api/v1/students")
 public class StudentController {
-
+	
 	@Autowired
-	private StudentService studentService;
+	private StudentConverter studentConverter;
+	
+	@Autowired
+	private  StudentService studentService;
 
 	@GetMapping
 	public Collection<Student> getAllStudents() {
+		log.info("------ getAllStudents()");
 		return studentService.findAll();
 	}
 
-	@Operation(summary = "Buscar estudiantes por ID", description = "Dado un ID, devuelve un objeto Student", tags= {"student"})
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Estudiante localizado", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Student.class)) }),
-			@ApiResponse(responseCode = "400", description = "No válido (NO implementado) ", content = @Content),
-			@ApiResponse(responseCode = "404", description = "Studiante no encontrado (NO implementado)", content = @Content) })
 	@GetMapping("/{id}")
-	public Student getStudentById(
-			@Parameter(description = "ID del estudiante a localizar", required=true) 
-			@PathVariable int id) {
-		System.out.println("-------- readStudent ");
-		return studentService.findById(id).orElseThrow(StudentNotFoundException::new);
+	public ResponseEntity<Student> getStudentById(@PathVariable("id") Long id) {
+		log.info("------ student by id: " + id);
+		Optional<Student> studentData = studentService.findById(id);
+		if (!studentData.isEmpty()) {
+		      return new ResponseEntity<>(studentData.get(), HttpStatus.OK);
+		    } else {
+		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		    }
 	}
 
-	// @RequestBody Student student significa que un estudiante será el cuerpo de la
-	// respuesta
-	// Devuelve en la cabecera la URL
 	@PostMapping
-	public ResponseEntity<?> addStudent(@Valid @RequestBody Student student) {
-		Student result = this.studentService.save(student);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(result.getId())
-				.toUri();
-
-		/*
-		 * Inside the method body, we build a java.net.URI object using
-		 * ServletUriComponentsBuilder. It builds the object by capturing the URI of the
-		 * current request and appending the placeholder /{id} to create a template.
-		 * buildAndExpand(result.getId()) inserts the id of the newly created student
-		 * into the template. The result is the URI of the new resource.
-		 */
-
-		// Nosotros podemos devolver 2 cosas siempre; o bien una URI o un recurso.
-		// En este caso devolvemos la URI
-		// Y marcamos de vuelta un 201
-		return ResponseEntity.created(location).build();
+	public ResponseEntity<StudentDTO> addStudent(@Valid @RequestBody StudentDTO studentDto) {
+		return new ResponseEntity<>(studentService.save(studentDto), HttpStatus.CREATED);
 	}
 
-	/*
-	 * @PostMapping public Student addStudent(@RequestBody Student student) { return
-	 * serv.save(student); }
-	 */
-
-	// Actualizar un usuario
 	@PutMapping("/{id}")
-	public ResponseEntity<Student> updateStudent(@PathVariable("id") int id, @RequestBody Student student) {
+	public ResponseEntity<StudentDTO> updateStudent(
+			@PathVariable("id") long id,
+			@RequestBody StudentDTO newStudentDTO) {
 		Optional<Student> studentData = studentService.findById(id);
 
-	    if (studentData.isPresent()) {
-	      Student newStudent = studentData.get();
-	      newStudent.setFirst_name(student.getFirst_name());
-	      newStudent.setLast_name(student.getLast_name());
-	      newStudent.setYear(student.getYear());
-	      return new ResponseEntity<>(studentService.save(newStudent), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
+		if (!studentData.isEmpty()) {
+			Student newStudent = studentData.get();
+			newStudent.setFirstName(newStudentDTO.getFirstName());
+			newStudent.setLastName(newStudentDTO.getLastName());
+			newStudent.setEmail(newStudentDTO.getEmail());
+			return new ResponseEntity<>(studentService.save(studentConverter.convertEntityToDto(newStudent)),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
-	// Borrar un usuario
 	@DeleteMapping("/{id}")
-	public void deleteStudent(@PathVariable int id) {
+	public void deleteStudent(@PathVariable Long id) {
 		studentService.deleteById(id);
 	}
 }
