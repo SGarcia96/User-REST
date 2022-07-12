@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.ejemplos.spring.controller.StudentController;
+import com.ejemplos.spring.service.StudentService;
 
 @SpringBootTest
 class ApiRestFullApplicationTests {
@@ -14,14 +15,12 @@ class ApiRestFullApplicationTests {
 	@Autowired
 	private StudentController controller;
 
+	@Autowired
+	private StudentService service;
+
 	@Test
 	void contextLoads() {
-		assertThat(true).isTrue();
-	}
-
-	@Test
-	void controllerNotNull() {
 		assertThat(controller).isNotNull();
+		assertThat(service).isNotNull();
 	}
-
 }

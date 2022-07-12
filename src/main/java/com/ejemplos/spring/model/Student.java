@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,11 +24,13 @@ public class Student implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Size(min = 0, max = 30)
+	
 	@NotEmpty
 	private String firstName;
+	
 	@NotEmpty
 	private String lastName;
+	
 	@NotEmpty
 	@Email
 	private String email;
