@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ejemplos.spring.controller.StudentNotFoundException;
 import com.ejemplos.spring.converter.StudentConverter;
 import com.ejemplos.spring.dto.StudentDTO;
+import com.ejemplos.spring.error.custom.StudentNotFoundException;
 import com.ejemplos.spring.model.Student;
 import com.ejemplos.spring.repository.StudentRepository;
 
@@ -28,12 +28,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Optional<Student> findById(Long id) {
-		Optional<Student> studentData = studentRepository.findById(id);
-		if (studentData.isPresent()) {
-			return studentData;
-		} else {
-			return Optional.empty();
-		}
+		return Optional.of(studentRepository.findById(id).orElseThrow(StudentNotFoundException::new));
 	}
 
 	@Override

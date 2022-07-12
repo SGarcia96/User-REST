@@ -1,4 +1,4 @@
-package com.ejemplos.spring.controller;
+package com.ejemplos.spring.error.custom;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

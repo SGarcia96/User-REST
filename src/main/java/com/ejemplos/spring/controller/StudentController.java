@@ -37,7 +37,7 @@ public class StudentController {
 
 	@GetMapping
 	public Collection<Student> getAllStudents() {
-		log.info("------ getAllStudents()");
+		log.info("------ getAllStudents() -> " + studentService.findAll());
 		return studentService.findAll();
 	}
 
