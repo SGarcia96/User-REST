@@ -42,14 +42,13 @@ public class UserController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+	public User getUserById(@PathVariable("id") Long id) {
 		log.info("------ getUserById " + id + " -> " + userService.findById(id));
-		Optional<User> userData = userService.findById(id);
-		if (!userData.isEmpty()) {
-		      return new ResponseEntity<>(userData.get(), HttpStatus.OK);
-		    } else {
-		      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		    }
+		Optional<User> user = userService.findById(id);
+		if (user.isPresent()) {
+			return user.get();
+		}
+		return null;
 	}
 
 	@PostMapping
@@ -67,9 +66,11 @@ public class UserController {
 
 		if (!userData.isEmpty()) {
 			User newUser = userData.get();
+			newUser.setUsername(newUserDTO.getUsername());
 			newUser.setFirstName(newUserDTO.getFirstName());
 			newUser.setLastName(newUserDTO.getLastName());
 			newUser.setEmail(newUserDTO.getEmail());
+			newUser.setPassword(newUserDTO.getPassword());
 			return new ResponseEntity<>(userService.save(userConverter.convertEntityToDto(newUser)),
 					HttpStatus.OK);
 		} else {

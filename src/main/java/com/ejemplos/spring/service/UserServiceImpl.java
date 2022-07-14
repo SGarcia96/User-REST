@@ -43,5 +43,4 @@ public class UserServiceImpl implements UserService {
 		Optional<User> userToDelete = Optional.of(userRepository.findById(id).orElseThrow(UserNotFoundException::new));
 		userRepository.deleteById(userToDelete.get().getId());
 	}
-
 }
